@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Keyring</title>
+<meta name="description" content="Your private password vault. Encrypted on your device, works offline.">
+<meta name="theme-color" content="#0e131b">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Keyring">
+<meta name="referrer" content="no-referrer">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/icons/favicon.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="/styles.css">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{margin:0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="installBar" class="install" hidden>
+    <span>Install Keyring on this device so it opens like an app and works offline.</span>
+    <button id="installBtn" class="primary" type="button">Install</button>
+  </div>
+  <div id="iosTip" class="install" hidden>
+    <span>To install on iPhone: tap <strong>Share</strong>, then <strong>Add to Home Screen</strong>. Then open Keyring from the new icon and set it up there.</span>
+  </div>
+
+  <!-- Lock / setup -->
+  <section id="lockView" class="lock" aria-live="polite">
+    <div class="keyhole"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 0 0-2 9.58V20a2 2 0 0 0 4 0v-1h2v-2h-2v-1h1v-2h-1v-2.42A5 5 0 0 0 12 2Zm0 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z"/></svg></div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h1 id="lockTitle">Keyring</h1>
+      <p id="lockSub" class="muted">Opening your vault…</p>
+    </div>
+    <form id="lockForm" style="display:flex;flex-direction:column;gap:12px" hidden>
+      <div class="field">
+        <label class="label" for="master">Master password</label>
+        <input id="master" type="password" autocomplete="current-password" required>
+      </div>
+      <div class="field" id="confirmWrap" hidden>
+        <label class="label" for="master2">Type it again</label>
+        <input id="master2" type="password" autocomplete="new-password">
+        <div class="meter" aria-hidden="true"><i id="masterMeter"></i></div>
+      </div>
+      <button id="lockBtn" class="primary" type="submit">Unlock</button>
+      <p id="lockMsg" class="msg"></p>
+    </form>
+    <div id="setupNote" class="note" hidden>
+      <strong>Pick something long you won't forget.</strong> Your passwords are encrypted on this device with this master password. Nobody can reset it. If you lose it, the saved passwords can't be recovered.
+    </div>
+    <div class="tools">
+      <button id="restoreBtn" type="button" class="ghost">Restore from a backup file</button>
+    </div>
+  </section>
+
+  <!-- Vault -->
+  <section id="vaultView" hidden style="display:flex;flex-direction:column;gap:16px">
+    <div class="top">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <h1>Keyring</h1>
+        <span class="status"><span class="dot"></span><span id="statusText">Encrypted · saved on this device</span></span>
+      </div>
+      <div class="row">
+        <button id="addBtn" class="primary" type="button">+ Add</button>
+        <button id="lockNow" type="button">Lock</button>
+      </div>
+    </div>
+    <input id="search" type="search" placeholder="Search Instagram, Gmail, Razorpay…" aria-label="Search saved logins">
+    <div id="editorSlot"></div>
+    <div id="list" class="list"></div>
+    <div id="confirmSlot"></div>
+    <div class="tools">
+      <button id="backupBtn" type="button">Download backup</button>
+      <button id="importBtn" type="button">Restore backup</button>
+    </div>
+    <p class="foot">Locks itself after 5 minutes without use. <span id="countText"></span><br><span id="backupText"></span></p>
+  </section>
+  <p class="offline" id="offlineText" style="text-align:center"></p>
+</div>
+<input id="fileInput" type="file" accept=".json,application/json" hidden>
+<div id="toast" class="toast" role="status"></div>
+<script src="/app.js"></script>
+</body>
+</html>
