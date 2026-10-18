@@ -138,7 +138,7 @@
     if (!entries.length){
       list.append(el("div",{class:"empty"},
         el("h2",{},"Nothing saved yet"),
-        el("p",{class:"muted small"},"Tap + Add to save your first login, or restore a backup file from another device."),
+        el("p",{class:"muted small"},"Tap + Add to save your first login."),
       ));
       return;
     }
@@ -256,7 +256,6 @@
   let pendingImport = null;
   function pickBackup(){ $("fileInput").value = ""; $("fileInput").click(); }
   $("restoreBtn").addEventListener("click", pickBackup);
-  $("importBtn").addEventListener("click", pickBackup);
   $("fileInput").addEventListener("change", async () => {
     const f = $("fileInput").files[0]; if (!f) return;
     let blob = null;
