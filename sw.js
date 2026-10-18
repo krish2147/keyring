@@ -1,4 +1,4 @@
-const VERSION = "keyring-v2";
+const VERSION = "keyring-v3";
 const SHELL = ["/", "/index.html", "/app.js", "/styles.css", "/manifest.webmanifest",
   "/icons/icon-192.png", "/icons/icon-512.png", "/icons/maskable-512.png", "/icons/apple-touch-icon.png", "/icons/favicon.png"];
 const FONT_CACHE = "keyring-fonts-v1";

@@ -117,6 +117,14 @@
   $("lockNow").addEventListener("click", lock);
 
   function bumpIdle(){ if (!key) return; clearTimeout(idleTimer); idleTimer = setTimeout(lock, 5*60*1000); }
+
+  // Lock as soon as the app is left (switching apps, home button, screen off),
+  // so every return asks for the master password. The share sheet for a
+  // backup also hides the page, so that one case is skipped.
+  let sharing = false;
+  const lockOnLeave = () => { if (key && !sharing) lock(); };
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") lockOnLeave(); });
+  window.addEventListener("pagehide", lockOnLeave);
   ["pointerdown","keydown","scroll"].forEach(ev => document.addEventListener(ev, bumpIdle, {passive:true}));
 
   // ---------- list ----------
@@ -238,7 +246,8 @@
     try {
       const f = new File([file], name, {type:"application/json"});
       if (navigator.canShare && navigator.canShare({files:[f]}) && /iPhone|iPad|Android/i.test(navigator.userAgent)){
-        await navigator.share({files:[f], title:"Keyring backup"});
+        sharing = true;
+        try { await navigator.share({files:[f], title:"Keyring backup"}); } finally { sharing = false; }
       } else {
         const url = URL.createObjectURL(file);
         const a = el("a",{href:url,download:name}); document.body.append(a); a.click(); a.remove();
